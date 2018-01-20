@@ -7,10 +7,7 @@ Licensed under the MIT License (see LICENSE for details)
 Written by Waleed Abdulla
 """
 
-import sys
-import os
-import math
-import random
+import keras.layers as KL
 import numpy as np
 import tensorflow as tf
 import scipy.misc
@@ -706,3 +703,17 @@ def download_trained_weights(coco_model_path, verbose=1):
         shutil.copyfileobj(resp, out)
     if verbose > 0:
         print("... done downloading pretrained model!")
+
+
+def log(text, array=None):
+    """Prints a text message. And, optionally, if a Numpy array is provided it
+    prints it's shape, min, and max values.
+    """
+    if array is not None:
+        text = text.ljust(25)
+        text += ("shape: {:20}  min: {:10.5f}  max: {:10.5f}".format(
+            str(array.shape),
+            array.min() if array.size else "",
+            array.max() if array.size else ""))
+    print(text)
+
