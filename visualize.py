@@ -7,18 +7,19 @@ Licensed under the MIT License (see LICENSE for details)
 Written by Waleed Abdulla
 """
 
-import random
-import itertools
 import colorsys
-import numpy as np
-from skimage.measure import find_contours
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-import matplotlib.lines as lines
-from matplotlib.patches import Polygon
-import IPython.display
+import itertools
+import random
 
-import utils
+import IPython.display
+import matplotlib.lines as lines
+import matplotlib.patches as patches
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.patches import Polygon
+from skimage.measure import find_contours
+
+from mask_rcnn import utils
 
 
 ############################################################

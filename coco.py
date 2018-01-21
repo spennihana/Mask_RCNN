@@ -29,8 +29,8 @@ Usage: import the module (see Jupyter notebooks for examples), or run from
 
 import os
 import time
-import numpy as np
 
+import numpy as np
 # Download and install the Python COCO tools from https://github.com/waleedka/coco
 # That's a fork from the original https://github.com/pdollar/coco with a bug
 # fix for Python 3.
@@ -46,8 +46,8 @@ import urllib.request
 import shutil
 
 from config import Config
-import utils
-import model as modellib
+from mask_rcnn import utils
+import mask_rcnn.model as modellib
 
 # Root directory of the project
 ROOT_DIR = os.getcwd()

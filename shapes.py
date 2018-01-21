@@ -11,11 +11,12 @@ Written by Waleed Abdulla
 
 import math
 import random
-import numpy as np
+
 import cv2
+import numpy as np
 
 from config import Config
-import utils
+from mask_rcnn import utils
 
 
 class ShapesConfig(Config):
