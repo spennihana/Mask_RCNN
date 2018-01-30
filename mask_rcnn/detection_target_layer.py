@@ -177,7 +177,6 @@ def detection_targets_graph(proposals, gt_class_ids, gt_boxes, gt_masks, config)
 class DetectionTargetLayer(KE.Layer):
   """Subsamples proposals and generates target box refinment, class_ids,
   and masks for each.
-
   Inputs:
   proposals: [batch, N, (y1, x1, y2, x2)] in normalized coordinates. Might
              be zero padded if there are not enough proposals.
@@ -185,7 +184,6 @@ class DetectionTargetLayer(KE.Layer):
   gt_boxes: [batch, MAX_GT_INSTANCES, (y1, x1, y2, x2)] in normalized
             coordinates.
   gt_masks: [batch, height, width, MAX_GT_INSTANCES] of boolean type
-
   Returns: Target ROIs and corresponding class IDs, bounding box shifts,
   and masks.
   rois: [batch, TRAIN_ROIS_PER_IMAGE, (y1, x1, y2, x2)] in normalized
@@ -197,7 +195,6 @@ class DetectionTargetLayer(KE.Layer):
   target_mask: [batch, TRAIN_ROIS_PER_IMAGE, height, width)
                Masks cropped to bbox boundaries and resized to neural
                network output size.
-
   Note: Returned arrays might be zero padded if not enough target ROIs.
   """
 
@@ -205,7 +202,7 @@ class DetectionTargetLayer(KE.Layer):
     super(DetectionTargetLayer, self).__init__(**kwargs)
     self.config = config
 
-  def call(self, inputs, **kwargs):
+  def call(self, inputs):
     proposals = inputs[0]
     gt_class_ids = inputs[1]
     gt_boxes = inputs[2]
@@ -215,21 +212,20 @@ class DetectionTargetLayer(KE.Layer):
     # TODO: Rename target_bbox to target_deltas for clarity
     names = ["rois", "target_class_ids", "target_bbox", "target_mask"]
     outputs = utils.batch_slice(
-        [proposals, gt_class_ids, gt_boxes, gt_masks],
-        lambda w, x, y, z: detection_targets_graph(
-            w, x, y, z, self.config),
-        self.config.IMAGES_PER_GPU, names=names)
+      [proposals, gt_class_ids, gt_boxes, gt_masks],
+      lambda w, x, y, z: detection_targets_graph(
+        w, x, y, z, self.config),
+      self.config.IMAGES_PER_GPU, names=names)
     return outputs
 
   def compute_output_shape(self, input_shape):
     return [
-        (None, self.config.TRAIN_ROIS_PER_IMAGE, 4),  # rois
-        (None, 1),  # class_ids
-        (None, self.config.TRAIN_ROIS_PER_IMAGE, 4),  # deltas
-        (None, self.config.TRAIN_ROIS_PER_IMAGE, self.config.MASK_SHAPE[0],
-         self.config.MASK_SHAPE[1])  # masks
+      (None, self.config.TRAIN_ROIS_PER_IMAGE, 4),  # rois
+      (None, 1),  # class_ids
+      (None, self.config.TRAIN_ROIS_PER_IMAGE, 4),  # deltas
+      (None, self.config.TRAIN_ROIS_PER_IMAGE, self.config.MASK_SHAPE[0],
+       self.config.MASK_SHAPE[1])  # masks
     ]
 
   def compute_mask(self, inputs, mask=None):
     return [None, None, None, None]
-
